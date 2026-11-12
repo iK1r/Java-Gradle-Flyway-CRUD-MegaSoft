@@ -1,0 +1,40 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.example'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.h2database:h2:2.5.252'
+    implementation 'org.flywaydb:flyway-core:13.12.1'
+}
+
+tasks.register('migrateDb', JavaExec) {
+    group = 'application'
+    description = 'Apply database migrations using Flyway'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.example.megasoft.DatabaseMigrationService'
+}
+
+tasks.register('queryDb', JavaExec) {
+    group = 'application'
+    description = 'Run the SELECT queries after Flyway migration'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.example.megasoft.Main'
+}
+
+tasks.register('clientDemo', JavaExec) {
+    group = 'application'
+    description = 'Check all five client CRUD operations and validation'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass = 'com.example.megasoft.ClientServiceDemo'
+}
+
+tasks.withType(JavaExec).configureEach {
+    jvmArgs '-Duser.language=en', '-Duser.country=US'
+}
